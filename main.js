@@ -1,13 +1,13 @@
 // main function
 const mainState = {
   preload: function () {
-    game.load.audio('jump', 'assets/jump.wav')
-    game.load.image('bird', 'assets/flapbird.png')
-    game.load.image('pipe', 'assets/pipe.png')
+    game.load.audio('jump', 'assets/jump.wav');
+    game.load.image('bird', 'assets/flapbird.png');
+    game.load.image('pipe', 'assets/pipe.png');
 
   },
 
-  // called after preload - setup game, sprites
+  // setup game, sprites
   create: function () {
     this.jumpSound = game.add.audio('jump');
     game.stage.backgroundColor = '#71c5cf';
@@ -15,6 +15,7 @@ const mainState = {
     this.bird = game.add.sprite(100, 245, 'bird');
     this.pipes = game.add.group();
     game.physics.arcade.enable(this.bird);
+    game.input.onDown.add(this.jump, this);
     this.bird.body.gravity.y = 1000;
     this.timer = game.time.events.loop(1500, this.addRowOfPipes, this);
     this.bird.anchor.setTo(-0.2, 0.5);
@@ -22,12 +23,12 @@ const mainState = {
     const spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     spaceKey.onDown.add(this.jump, this);
 
-    //score
+    // score
     this.score = 0;
     this.labelScore = game.add.text(20, 20, "0", {font: "30px Arial", fill: "ffffff"});
   },
 
-  // called 60 times per second - contains game logic
+  // update
   update: function () {
     if(this.bird.y < 0 || this.bird.y > 490)
         this.restartGame();
@@ -86,7 +87,7 @@ const mainState = {
 };
 
 // initialize Phaser
-const game = new Phaser.Game(400, 490);
+const game = new Phaser.Game(400, 490, Phaser.AUTO, 'flap');
 
 // add mainstate
 game.state.add('main', mainState);
